@@ -2,7 +2,8 @@ pipeline {
     agent any
         environment {
         MAVEN_HOME = tool 'Maven3'
-        PATH = "$MAVEN_HOME/bin:$PATH"
+        PATH = "$MAVEN_HOME/bin:$PATH" 
+        }
 
     stages {
         stage('Build') {
