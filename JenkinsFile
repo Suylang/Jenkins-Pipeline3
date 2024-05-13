@@ -1,12 +1,53 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Build"){
-            steps{
-               sh 'mvn clean package' //mavern build commands
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'mvn clean package' // Maven build commands
             }
-            
         }
-       
+
+        stage('Unit and Integration Tests') {
+            steps {
+                sh 'mvn test' // Command to run unit tests
+                sh 'mvn integration-test' // Command to run integration tests
+            }
+        }
+
+        stage('Code Analysis') {
+            steps {
+                // Example commands for Checkstyle, PMD, FindBugs
+                sh 'mvn checkstyle:checkstyle pmd:pmd findbugs:findbugs'
+            }
+        }
+
+        stage('Security Scan') {
+            steps {
+                // Example command for OWASP Dependency-Check plugin
+                sh 'mvn org.owasp:dependency-check-maven:check'
+            }
+        }
+
+        stage('Deploy to Staging') {
+            steps {
+                // Example command to deploy to staging server using SSH
+                sh 'ssh user@staging-server "cd /path/to/deploy && git pull && ./deploy.sh"'
+            }
+        }
+
+        stage('Integration Tests on Staging') {
+            steps {
+                // Example command to run integration tests on staging server
+                sh 'mvn integration-test'
+            }
+        }
+
+        stage('Deploy to Production') {
+            steps {
+                // Example command to deploy to production server using SSH
+                sh 'ssh user@production-server "cd /path/to/deploy && git pull && ./deploy.sh"'
+            }
+        }
     }
 }
